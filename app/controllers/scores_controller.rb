@@ -1,6 +1,6 @@
 class ScoresController < ApplicationController
   before_action :set_score, only: [:show, :edit, :update, :destroy]
-
+  before_filter :authenticate_user!, except: [:index, :show]
   # GET /scores
   # GET /scores.json
   def index
@@ -14,7 +14,7 @@ class ScoresController < ApplicationController
 
   # GET /scores/new
   def new
-    @score = Score.new
+    @score = current_user.scores.build
   end
 
   # GET /scores/1/edit
@@ -24,7 +24,7 @@ class ScoresController < ApplicationController
   # POST /scores
   # POST /scores.json
   def create
-    @score = Score.new(score_params)
+    @score = current_user.scores.build(score_params)
 
     respond_to do |format|
       if @score.save
